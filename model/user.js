@@ -38,6 +38,12 @@ const userSchema = new Schema({
             token: String
         },
         select: false
+    },
+    location: {
+        type: {
+            lat: Number,
+            long: Number
+        }
     }
 
 });
