@@ -29,7 +29,7 @@ const userSchema = new Schema({
     phone_number: {
         type: String,
         required: true,
-        unique: true
+        unique: false
     },
     interests: [String],
     fbProvider: {
@@ -52,14 +52,14 @@ const userSchema = new Schema({
 
 userSchema.methods.createPassword = (password) => {
     var salt = crypto.randomBytes(16).toString('base64');
-    this.hashedPassCode = crypto.pbkdf2Sync(password, new Buffer(salt, 'utf8'), 1000, 64, 'sha512').toString('hex');
+    this.hashedPassCode = crypto.pbkdf2Sync(password, new Buffer(salt, 'utf8'), 1000, 86, 'sha512').toString('hex');
 };
 
 //Password validity check
 
 userSchema.methods.isValidPassword = (password) => {
     var salt = crypto.randomBytes(16).toString('base64');
-    var hashedPassCode = crypto.pbkdf2Sync(password, new Buffer(salt, 'utf8'), 1000, 64, 'sha512').toString('hex');
+    var hashedPassCode = crypto.pbkdf2Sync(password, new Buffer(salt, 'utf8'), 1000, 86, 'sha512').toString('hex');
 
     return hashedPassCode === this.hashedPassCode;
 };
