@@ -34,10 +34,10 @@ module.exports = {
                     last_name: req.body.last,
                     phone_number: req.body.phone,
                     interests: req.body.interests.split(', '),
-                    location: {
+                   /* location: {
                         lat: req.body.lat,
                         long: req.body.long
-                    }
+                    }*/
                 });
 
                 if (!regex().test(req.body.email)) {
