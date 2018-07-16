@@ -2,13 +2,19 @@ const User = require('../model/user');
 const regex = require('email-regex');
 const _ = require('underscore');
 
+var allusers = [];
+var matchusers = [];
+
 module.exports = {
     getAll : (req, res) => {
-        User.find({}, {}, {limit: 14, sort: req.params.list_number}, (err, users) => {
+        User.find({}, {}, {limit: 14, skip: req.params.list_number * 14}, (err, users) => {
             if (err) res.send(err);
+            _.each(users, (elem, index) => {
+                allusers.push(elem);
+            });
             res
             .status(302)
-            .send(users);
+            .send(allusers);
         });
     },
     getSpecific : (req, res) => {
@@ -67,7 +73,7 @@ module.exports = {
             }
         });    
     },
-    edit: (req, res) => {
+    edit : (req, res) => {
         if (req.body.first && req.body.last && req.body.phone) {
             User.findOne({_id: req.params.user_id}, (err, user) => {
                 user.first_name = req.body.first;
@@ -80,5 +86,21 @@ module.exports = {
                 */
             });
         }
+    },
+    listMatch : (req, res) => {
+       User.findOne({_id: req.params.user_id}, (err, user) => {
+           User.find({}, {}, {limit: 10}, (err, users) => {
+               _.each(users, (elem, index) => {
+                   _.each(user.interests, (interest, arrIndex) => {
+                        if (elem.interests.indexOf(interest) >= 0) {
+                            matchusers.push(elem);
+                        }
+                   });
+               });
+           });
+       });
+       res
+       .status(302)
+       .send(matchusers);
     }
 }

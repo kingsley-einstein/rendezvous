@@ -3,11 +3,10 @@ const app = express();
 const settings = require('./settings');
 const credentials = require('./credentials');
 const mongoose = require('mongoose');
-require('dotenv')
-.config();
+const environment = require('./exports');
 
-app.set('port', process.env.PORT || 4000);
-app.set('env', process.env.NODE_ENV);
+app.set('port', environment.port);
+app.set('env', environment.env);
 
 
 
@@ -28,13 +27,13 @@ app.listen(app.get('port'), () => {
     
     switch(app.get('env')) {
         case 'development' : 
-            mongoose.connect(process.env.MONGO_DEV, options, (err) => {
+            mongoose.connect(environment.mongoDev, options, (err) => {
                 if (err) throw err;
                 console.log('Mongoose connected');
             });
             break;
         case 'production' : 
-            mongoose.connect(process.env.MONGO_PROD, options, (err) => {
+            mongoose.connect(environment.mongoProd, options, (err) => {
                 if (err) throw err;
                 console.log('Mongoose connected to cloud server');
             });

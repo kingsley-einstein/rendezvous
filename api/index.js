@@ -1,4 +1,5 @@
 const response = require('./response');
+const environment = require('../exports');
 
 module.exports.init = (app) => {
 
@@ -40,7 +41,7 @@ module.exports.init = (app) => {
 
         The ngOnInit() block tells Angular to make call on initialisation and then maps the response from call (i.e 'data') to the response variable which can then be used
     */
-    app.get('/api/users/:user_id', response.getSpecific);
+    app.get('/api/users/:user_id/'+environment.secret, response.getSpecific);
 
     /*
         Creates a new user.
@@ -51,7 +52,7 @@ module.exports.init = (app) => {
         - last: For user's last name
         - interests: For user's interests. Indicate that the user separates all interests properly with a comma for meaningful persistence. For instance: reading, writing, playing e.t.c.
      */
-    app.post('/api/users/create', response.create);
+    app.post('/api/users/create/'+environment.secret, response.create);
 
     /*
         Edits user's detail. Required body parameters to be sent to server side includes:
@@ -59,11 +60,11 @@ module.exports.init = (app) => {
         - last: For last name
         - phone: For phone number
     */
-    app.put('/api/users/:user_id/edit', response.edit);
+    app.put('/api/users/:user_id/edit/'+environment.secret, response.edit);
 
     /*
         Get's all users. This sends an array to the client side which should perform a looping of some sort to get the data properly.
         The :list_number parameter is used to sort the array.. useful for pagination
     */
-    app.get('/api/users/:list_number', response.getAll);
+    app.get('/api/users/'+environment.secret, response.getAll);
 }
