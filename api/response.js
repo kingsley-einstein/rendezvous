@@ -4,7 +4,7 @@ const _ = require('underscore');
 
 module.exports = {
     getAll : (req, res) => {
-        User.find({}, {}, {limit: 14}, (err, users) => {
+        User.find({}, {}, {limit: 14, sort: req.params.list_number}, (err, users) => {
             if (err) res.send(err);
             res
             .status(302)

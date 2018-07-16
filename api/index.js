@@ -63,6 +63,7 @@ module.exports.init = (app) => {
 
     /*
         Get's all users. This sends an array to the client side which should perform a looping of some sort to get the data properly.
+        The :list_number parameter is used to sort the array.. useful for pagination
     */
-    app.get('/api/users', response.getAll);
+    app.get('/api/users/:list_number', response.getAll);
 }

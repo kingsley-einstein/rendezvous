@@ -3,3 +3,6 @@
 
 #Credentials
 /credentials.js
+
+#Environment variables
+/.env
