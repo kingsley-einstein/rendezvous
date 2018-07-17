@@ -4,11 +4,12 @@ const _ = require('underscore');
 
 var allusers = [];
 var matchusers = [];
+var search = [];
 
 
 module.exports = {
     getAll : (req, res) => {
-        User.find({}, {}, {limit: 14, skip: Math.floor(Math.random() * 14)}, (err, users) => {
+        User.find({}, {}, {limit: 14, /*skip: Math.floor(Math.random() * 14)*/}, (err, users) => {
             if (err) res.send(err);
             _.each(users, (elem, index) => {
                 //allusers.pop();
@@ -16,7 +17,7 @@ module.exports = {
             });
             res
             .status(302)
-            .send(allusers);
+            .json(allusers);
             allusers = [];
         });
     },
@@ -25,7 +26,7 @@ module.exports = {
             if (err) res.send(err);
             res
             .status(302)
-            .send(user);
+            .json(user);
         });
     },
     create : (req, res) => {
@@ -37,42 +38,51 @@ module.exports = {
                 .send('User with given e-mail exists');
             }
             else {
-                var newuser = new User({
-                    email: req.body.email,
-                    first_name: req.body.first,
-                    last_name: req.body.last,
-                    phone_number: req.body.phone,
-                    interests: req.body.interests.split(', '),
-                    gravatar: require('md5')(req.body.email)
-                   /* location: {
-                        lat: req.body.lat,
-                        long: req.body.long
-                    }*/
-                });
-
-                if (!regex().test(req.body.email)) {
-                    req.session.flash = {
-                        message: 'Invalid E-mail'
-                    };
-                }
-                else {
-                    newuser.validate((err) => {
-                        if (err) {
+                User.findOne({phone_number: req.body.phone}, (err, item) => {
+                    if (item) {
+                        res
+                        .status(500)
+                        .send('User with mobile number exists');
+                    }
+                    else {
+                        var newuser = new User({
+                            email: req.body.email,
+                            first_name: req.body.first,
+                            last_name: req.body.last,
+                            phone_number: req.body.phone,
+                            interests: req.body.interests.split(', '),
+                            gravatar: require('md5')(req.body.email)
+                           /* location: {
+                                lat: req.body.lat,
+                                long: req.body.long
+                            }*/
+                        });
+        
+                        if (!regex().test(req.body.email)) {
                             res
                             .status(500)
-                            .send(err);
+                            .send('Invalid email');
                         }
                         else {
-                        newuser.createPassword(req.body.pass);
-                        newuser.save();
-                        res
-                        .status(302)
-                        .send('User created');
+                            newuser.validate((err) => {
+                                if (err) {
+                                    res
+                                    .status(500)
+                                    .send(err);
+                                }
+                                else {
+                                newuser.createPassword(req.body.pass);
+                                newuser.save();
+                                res
+                                .status(302)
+                                .send('User created');
+                                }
+                                
+        
+                            });
                         }
-                        
-
-                    });
-                }
+                    }
+                });
                 
             }
         });    
@@ -119,5 +129,55 @@ module.exports = {
         
        });
        
+    },
+    login : (req, res) => {
+        if (req.body.email && req.body.pass) {
+            if (regex().test(req.body.email)) {
+                User.findOne({email: req.body.email}, (err, user) => {
+                    if (user) {
+                        if (user.isValidPassword(req.body.pass)) {
+                            res
+                            .status(302)
+                            .json(user);
+                        }
+                        else {
+                            res
+                            .status(500)
+                            .send('Incorrect password');
+                        }
+                    }
+                    else {
+                        res
+                        .status(500)
+                        .send('Error! User Not Found');
+                    }
+                });
+            }
+            else {
+                res
+                .status(500)
+                .send('Error! Invalid e-mail');
+            }
+        }
+    },
+    search : (req, res) => {
+        if (req.body.search) {
+            User.find({}, {}, {}, (err, items) => {
+                _.each(items, (item, index) => {
+                    if (item.interests.indexOf(req.body.search) != -1) {
+                        search.push(item);
+                    }
+                });
+                res
+                .status(302)
+                .json(search);
+                search = [];
+            });
+        }
+        else {
+            res
+            .status(500)
+            .send('Field cannot be left empty');
+        }
     }
 }

@@ -13,11 +13,11 @@ const userSchema = new Schema({
     first_name: {
         type: String,
         required: true,
-        maxlength: 80
+        maxlength: 80,
     },
     last_name: {
         type: String,
-        required: true,
+       required: true,
         maxlength: 80
     },
     email: {
@@ -26,11 +26,7 @@ const userSchema = new Schema({
         unique: true,
     },
     hashedPassCode: String,
-    phone_number: {
-        type: String,
-        required: true,
-       // unique: false
-    },
+    phone_number: String,
     interests: [String],
     fbProvider: {
         type: {
@@ -52,15 +48,15 @@ const userSchema = new Schema({
 //Create password and hash. This is a security measure just in case database is compromised
 
 userSchema.methods.createPassword = (password) => {
-    var salt = crypto.randomBytes(16).toString('base64');
-    this.hashedPassCode = crypto.pbkdf2Sync(password, new Buffer(salt, 'utf8'), 1000, 86, 'sha512').toString('hex');
+    //var salt = crypto.randomBytes(16).toString('base64');
+    this.hashedPassCode = crypto.pbkdf2Sync(password, new Buffer('secret', 'utf8'), 1000, 86, 'sha512').toString('hex');
 };
 
 //Password validity check
 
 userSchema.methods.isValidPassword = (password) => {
-    var salt = crypto.randomBytes(16).toString('base64');
-    var hashedPassCode = crypto.pbkdf2Sync(password, new Buffer(salt, 'utf8'), 1000, 86, 'sha512').toString('hex');
+    //var salt = crypto.randomBytes(16).toString('base64');
+    var hashedPassCode = crypto.pbkdf2Sync(password, new Buffer('secret', 'utf8'), 1000, 86, 'sha512').toString('hex');
 
     return hashedPassCode === this.hashedPassCode;
 };

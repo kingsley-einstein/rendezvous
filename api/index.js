@@ -72,4 +72,14 @@ module.exports.init = (app) => {
      * Find users that match logged user's interests
      */
     app.get('/api/users/:user_id/match/'+environment.secret, response.listMatch);
+
+    /**
+     * Log user in
+     */
+    app.post('/api/login/'+environment.secret, response.login);
+
+    /**
+     * Search for a particular user
+     */
+    app.post('/api/users/search/'+environment.secret, response.search);
 }
