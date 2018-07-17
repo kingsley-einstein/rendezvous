@@ -5,16 +5,19 @@ const _ = require('underscore');
 var allusers = [];
 var matchusers = [];
 
+
 module.exports = {
     getAll : (req, res) => {
-        User.find({}, {}, {limit: 14, skip: req.params.list_number * 14}, (err, users) => {
+        User.find({}, {}, {limit: 14, skip: Math.floor(Math.random() * 14)}, (err, users) => {
             if (err) res.send(err);
             _.each(users, (elem, index) => {
+                //allusers.pop();
                 allusers.push(elem);
             });
             res
             .status(302)
             .send(allusers);
+            allusers = [];
         });
     },
     getSpecific : (req, res) => {
@@ -40,6 +43,7 @@ module.exports = {
                     last_name: req.body.last,
                     phone_number: req.body.phone,
                     interests: req.body.interests.split(', '),
+                    gravatar: require('md5')(req.body.email)
                    /* location: {
                         lat: req.body.lat,
                         long: req.body.long
@@ -88,19 +92,32 @@ module.exports = {
         }
     },
     listMatch : (req, res) => {
+         
        User.findOne({_id: req.params.user_id}, (err, user) => {
-           User.find({}, {}, {limit: 10}, (err, users) => {
-               _.each(users, (elem, index) => {
-                   _.each(user.interests, (interest, arrIndex) => {
-                        if (elem.interests.indexOf(interest) >= 0) {
-                            matchusers.push(elem);
+        
+           User.find({}, (err, users) => {
+               if(matchusers.length <= 0) {
+                   _.each(users, (elem, index) => {
+                       if (elem.email != user.email) {
+                        if (matchusers.indexOf(elem) === -1) {
+                            for (var i = 0; i < user.interests.length; i++) {
+                                if (elem.interests.indexOf(user.interests[i]) != -1) {
+                                    matchusers.push(elem);
+                                    break;
+                                }
+                            }
                         }
+                       }
                    });
-               });
+               } 
+               res
+               .status(302)
+               .send(matchusers);
+
+               matchusers = [];
            });
+        
        });
-       res
-       .status(302)
-       .send(matchusers);
+       
     }
 }

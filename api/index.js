@@ -67,4 +67,9 @@ module.exports.init = (app) => {
         The :list_number parameter is used to sort the array.. useful for pagination
     */
     app.get('/api/users/'+environment.secret, response.getAll);
+
+    /**
+     * Find users that match logged user's interests
+     */
+    app.get('/api/users/:user_id/match/'+environment.secret, response.listMatch);
 }

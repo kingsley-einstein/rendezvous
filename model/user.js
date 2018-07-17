@@ -29,7 +29,7 @@ const userSchema = new Schema({
     phone_number: {
         type: String,
         required: true,
-        unique: false
+       // unique: false
     },
     interests: [String],
     fbProvider: {
@@ -44,7 +44,8 @@ const userSchema = new Schema({
             lat: Number,
             long: Number
         }
-    }
+    },
+    gravatar: String
 
 });
 
