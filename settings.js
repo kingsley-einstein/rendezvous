@@ -1,6 +1,6 @@
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
-const credentials = require('./credentials');
+//const credentials = require('./credentials');
 const api = require('./api');
 
 module.exports = {
@@ -13,10 +13,10 @@ module.exports = {
         }));
         app.use(require('cookie-parser')());
         app.use(session({
-            secret: credentials.session.init.secret,
-            cookie: credentials.session.init.cookie,
-            resave: credentials.session.init.resave,
-            saveUninitialized: credentials.session.init.saveUninitialized,
+            secret: 'sh',
+            cookie: {signed: true, secure: false, maxAge: 900000},
+            resave: true,
+            saveUninitialized: true,
             store: new MongoStore({
                 mongooseConnection: require('mongoose').connection,
                 db: app.get('env') === 'development' ? 'getphysicaltestdb' : 'getphysicalclouddb'
