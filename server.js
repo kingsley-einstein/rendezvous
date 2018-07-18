@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const settings = require('./settings');
-const credentials = require('./credentials');
+//const credentials = require('./credentials');
 const mongoose = require('mongoose');
 const environment = require('./exports');
 
