@@ -20,6 +20,9 @@ describe('CALLS', () => {
         settings.config(app);
         settings.routeApp(app);
     });
+    afterEach(() => {
+        console.log('Test carried out successfully at this point');
+    });
     describe('RESPONSES', () => {
         describe('GET', () => {
             it('should handle /api/users/:user_id/'+environment.secret, () => {
@@ -31,16 +34,38 @@ describe('CALLS', () => {
             it('should handle /api/users/:user_id/match/'+environment.secret, () => {
                 expect(app.get).to.be.calledWith('/api/users/:user_id/match/'+environment.secret, response.listMatch);
             });
+            it('should handle /api/users/:user_id/:match_id/request/'+environment.secret, () => {
+                expect(app.get).to.be.calledWith('/api/users/:user_id/:match_id/request/'+environment.secret, response.requestConnection);
+            });
+            it('should handle /api/users/:user_id/:match_id/accept/'+environment.secret, () => {
+                expect(app.get).to.be.calledWith('/api/users/:user_id/:match_id/accept/'+environment.secret, response.acceptConnection);
+            });
+            it('should handle /api/users/:user_id/:match_id/reject/'+environment.secret, () => {
+                expect(app.get).to.be.calledWith('/api/users/:user_id/:match_id/reject/'+environment.secret, response.rejectConnection);
+            });
+
             
         });
         describe('POST', () => {
             it('should handle /api/users/create/'+environment.secret, () => {
                 expect(app.post).to.be.calledWith('/api/users/create/'+environment.secret, response.create);
             });
+            it('should handle /api/login/'+environment.secret, () => {
+                expect(app.post).to.be.calledWith('/api/login/'+environment.secret, response.login);
+            });
+            it('should handle /api/users/search/'+environment.secret, () => {
+                expect(app.post).to.be.calledWith('/api/users/search/'+environment.secret, response.search);
+            });
+            it('should handle /api/users/login/fb/'+environment.secret, () => {
+                expect(app.post).to.be.calledWith('/api/users/login/fb/'+environment.secret, response.fbPersist);
+            });
         });
         describe('PUT', () => {
             it('should handle /api/users/:user_id/edit/'+environment.secret, () => {
                 expect(app.put).to.be.calledWith('/api/users/:user_id/edit/'+environment.secret, response.edit);
+            });
+            it('should handle /api/users/:user_id/changeloc/'+environment.secret, () => {
+                expect(app.put).to.be.calledWith('/api/users/:user_id/changeloc/'+environment.secret, response.changeGeoLoc);
             });
         });
     });

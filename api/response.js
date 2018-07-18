@@ -5,6 +5,7 @@ const _ = require('underscore');
 var allusers = [];
 var matchusers = [];
 var search = [];
+//var matchusersInSameLocation = [];
 
 
 module.exports = {
@@ -75,7 +76,7 @@ module.exports = {
                                 newuser.save();
                                 res
                                 .status(302)
-                                .send('User created');
+                                .json(newuser);
                                 }
                                 
         
@@ -93,12 +94,27 @@ module.exports = {
                 user.first_name = req.body.first;
                 user.last_name = req.body.last;
                 user.phone_number = req.body.phone;
+                if(req.body.interests) {
+                    user.interests = [];
+                    _.each(req.body.interests.split(', '), (interest, index) => {
+                        user.interests.push(interest);
+                    });
+                }
                 user.save();
                 /*res
                 .status(302)
                 .redirect('/api/users/'+req.params.user_id);
                 */
+               res
+               .status(302)
+               .json(user);
             });
+        }
+        else {
+
+            res
+            .status(302)
+            .send('Fields cannot be left empty');
         }
     },
     listMatch : (req, res) => {
@@ -111,7 +127,7 @@ module.exports = {
                        if (elem.email != user.email) {
                         if (matchusers.indexOf(elem) === -1) {
                             for (var i = 0; i < user.interests.length; i++) {
-                                if (elem.interests.indexOf(user.interests[i]) != -1) {
+                                if (elem.interests.toString().toLowerCase().indexOf(user.interests[i].toLowerCase()) != -1 && elem.position.lat === user.position.lat && elem.position.long === user.position.long) {
                                     matchusers.push(elem);
                                     break;
                                 }
@@ -164,7 +180,7 @@ module.exports = {
         if (req.body.search) {
             User.find({}, {}, {}, (err, items) => {
                 _.each(items, (item, index) => {
-                    if (item.interests.indexOf(req.body.search) != -1) {
+                    if (item.interests.toString().toLowerCase().indexOf(req.body.search.toLowerCase()) != -1) {
                         search.push(item);
                     }
                 });
@@ -179,5 +195,94 @@ module.exports = {
             .status(500)
             .send('Field cannot be left empty');
         }
+    },
+    requestConnection : (req, res) => {
+        User.findOne({_id: req.params.user_id}, (err, user) => {
+            User.findOne({_id: req.params.match_id}, (err, match) => {
+                req.session.message = user.first_name+' '+user.last_name+' wants to connect with you';
+                match.notification = req.session.message;
+                match.requestid = user._id;
+                match.save();
+                delete req.session.message;
+                res
+                .status(302)
+                .send('Connection Request Made');
+            });
+        });
+    },
+    acceptConnection : (req, res) => {
+        User.findOne({_id: req.params.user_id}, (err, user) => {
+            User.findOne({_id: req.params.match_id}, (err, match) => {
+                req.session.message = user.first_name+' '+user.last_name+' accepted your request to connect. Make a call now';
+                match.notification = req.session.message;
+                match.requestphone = user.phone_number;
+                user.requestid = '';
+                user.notification = '';
+                match.save();
+                user.save();
+                delete req.session.message;
+                res
+                .status(302)
+                .send('Request Accepted');
+            });
+        });
+    },
+    rejectConnection: (req, res) => {
+        User.findOne({_id: req.params.user_id}, (err, user) => {
+            User.findOne({_id: req.params.match_id}, (err, match) => {
+                match.notification = '';
+                user.notification = '';
+                match.save();
+                user.save();
+                res
+                .status(302)
+                .send('Request Rejected');
+            });
+        });
+    },
+    changeGeoLoc: (req, res) => {
+        User.findOne({_id: req.params.user_id}, (err, user) => {
+            user.position.lat = req.body.lat;
+            user.position.long = req.body.long;
+            user.save();
+            res
+            .status(302)
+            .send('Geolocation Changed');
+        });
+    },
+    fbPersist: (req, res) => {
+        User.findOne({email: regex().test(req.body.email) ? req.body.email : req.body.displayName+'@facebook.com'}, (err, user) => {
+            if (user) {
+                res
+                .status(302)
+                .json(user);
+            }
+            else {
+                var newuser = new User({
+                    email: regex().test(req.body.email) ? req.body.email : req.body.displayName+'@facebook.com',
+                    first_name: req.body.displayName.split('')[0],
+                    last_name: req.body.displayName.split(' ')[1],
+                    interests: ['?'],
+                    phone_number: req.body.phone ? req.body.phone : 'None',
+                    gravatar: require('md5')(regex().test(req.body.email) ? req.body.email : req.body.displayName+'@facebook.com')
+
+                });
+                newuser.validate((err) => {
+                    if (err) {
+                        res
+                        .status(500)
+                        .send(err);
+                    }
+                    else {
+                        newuser.createPassword(new Buffer('encrypted', 'utf8'));
+                        newuser.save();
+                        res
+                        .status(302)
+                        .json(newuser);
+
+                    }
+                });
+            }
+        });
     }
 }

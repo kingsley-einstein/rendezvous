@@ -19,7 +19,7 @@ module.exports = {
             saveUninitialized: credentials.session.init.saveUninitialized,
             store: new MongoStore({
                 mongooseConnection: require('mongoose').connection,
-                db: app.get('env') === 'development' ? 'getphysicaltestdb' : ''
+                db: app.get('env') === 'development' ? 'getphysicaltestdb' : 'getphysicalclouddb'
             })
         }));
         app.use((req, res, next) => {
@@ -27,11 +27,11 @@ module.exports = {
             res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
             next();
         });
-        app.use((req, res, next) => {
+        /*app.use((req, res, next) => {
             res.locals.flash = req.session.flash;
             delete req.session.flash;
             next();
-        });
+        });*/
 
         console.log('App configured');
     },

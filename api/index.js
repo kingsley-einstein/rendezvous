@@ -59,6 +59,7 @@ module.exports.init = (app) => {
         - first: For first name
         - last: For last name
         - phone: For phone number
+        - interests: For interests
     */
     app.put('/api/users/:user_id/edit/'+environment.secret, response.edit);
 
@@ -79,7 +80,32 @@ module.exports.init = (app) => {
     app.post('/api/login/'+environment.secret, response.login);
 
     /**
-     * Search for a particular user
+     * Search for a particular user based on specified interest
      */
     app.post('/api/users/search/'+environment.secret, response.search);
+
+    /**
+     * Request to connect with a user
+     */
+    app.get('/api/users/:user_id/:match_id/request/'+environment.secret, response.requestConnection);
+    
+    /**
+     * Accept user's connection request
+     */
+    app.get('/api/users/:user_id/:match_id/accept/'+environment.secret, response.acceptConnection);
+
+    /**
+     * Reject user's connection request
+     */
+    app.get('/api/users/:user_id/:match_id/reject/'+environment.secret, response.rejectConnection);
+
+    /**
+     * Change user's location as user moves
+     */
+    app.put('/api/users/:user_id/changeloc/'+environment.secret, response.changeGeoLoc);
+
+    /**
+     * Persist if data is coming from an FB background. If user exists, sends data
+     */
+    app.post('/api/users/login/fb/'+environment.secret, response.fbPersist);
 }

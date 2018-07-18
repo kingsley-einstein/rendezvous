@@ -17,7 +17,7 @@ const userSchema = new Schema({
     },
     last_name: {
         type: String,
-       required: true,
+        required: true,
         maxlength: 80
     },
     email: {
@@ -35,14 +35,15 @@ const userSchema = new Schema({
         },
         select: false
     },
-    location: {
-        type: {
-            lat: Number,
-            long: Number
-        }
+    position: {
+        lat: Number,
+        long: Number
     },
-    gravatar: String
-
+    gravatar: String,
+    notification: String,
+    requestid: String,
+    requestphone: String
+    
 });
 
 //Create password and hash. This is a security measure just in case database is compromised
