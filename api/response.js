@@ -113,7 +113,7 @@ module.exports = {
         else {
 
             res
-            .status(302)
+            .status(500)
             .send('Fields cannot be left empty');
         }
     },
@@ -138,7 +138,7 @@ module.exports = {
                } 
                res
                .status(302)
-               .send(matchusers);
+               .json(matchusers);
 
                matchusers = [];
            });
@@ -261,7 +261,7 @@ module.exports = {
                 var newuser = new User({
                     email: regex().test(req.body.email) ? req.body.email : req.body.displayName+'@facebook.com',
                     first_name: req.body.displayName.split('')[0],
-                    last_name: req.body.displayName.split(' ')[1],
+                    last_name: req.body.displayName.split(' ')[1] || '-',
                     interests: ['?'],
                     phone_number: req.body.phone ? req.body.phone : 'None',
                     gravatar: require('md5')(regex().test(req.body.email) ? req.body.email : req.body.displayName+'@facebook.com')
