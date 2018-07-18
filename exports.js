@@ -1,5 +1,5 @@
-require('dotenv')
-.config();
+/*require('dotenv')
+.config();*/
 
 //Export environment variables to be used by other modules. The secret token is to be used in tests and for the configuration of routes
 module.exports = {
