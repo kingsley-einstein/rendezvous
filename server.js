@@ -5,7 +5,7 @@ const credentials = require('./credentials');
 const mongoose = require('mongoose');
 const environment = require('./exports');
 
-app.set('port', environment.port);
+app.set('port', process.env.PORT || environment.port);
 app.set('env', environment.env);
 
 
