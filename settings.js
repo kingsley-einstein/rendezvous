@@ -27,6 +27,7 @@ module.exports = {
             res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
             next();
         });
+        app.set('json spaces', 4);
         /*app.use((req, res, next) => {
             res.locals.flash = req.session.flash;
             delete req.session.flash;
