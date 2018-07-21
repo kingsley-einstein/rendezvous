@@ -125,98 +125,134 @@ module.exports = {
         }
     },
     uploadPhoto: (req, res, next) => {
-        User.findOne({_id: req.params.user_id}, {}, (err, user) => {
-            cloudinary.uploader.upload(req.file.path, (res) => {
-                console.log(res);
-                user.photo = req.file.path;
-                user.save();
-            });
-        });
-    },
-    listMatch : (req, res) => {
-         
-       User.findOne({_id: req.params.user_id}, (err, user) => {
-        
-           User.find({}, (err, users) => {
-               if(matchusers.length <= 0) {
-                   _.each(users, (elem, index) => {
-                       if (elem.email != user.email) {
-                        if (matchusers.indexOf(elem) === -1) {
-                            for (var i = 0; i < user.interests.length; i++) {
-                                if (elem.interests.toString().toLowerCase().indexOf(user.interests[i].toLowerCase()) != -1 && elem.position.lat === user.position.lat && elem.position.long === user.position.long && (elem.position.posInKilometers - user.position.posInKilometers <= 1)) {
-                                    matchusers.push(elem);
-                                    break;
-                                }
-                            }
-                        }
-                       }
-                   });
-               } 
-               res
-               .status(200)
-               .json(matchusers);
-
-               matchusers = [];
-           });
-        
-       });
-       
-    },
-    search : (req, res) => {
-        if (req.body.search) {
-            User.find({}, {}, {}, (err, items) => {
-                _.each(items, (item, index) => {
-                    if (item.interests.toString().toLowerCase().indexOf(req.body.search.toLowerCase()) != -1) {
-                        search.push(item);
-                    }
+        if (req.headers.token === env.secret) {
+            User.findOne({_id: req.params.user_id}, {}, (err, user) => {
+                cloudinary.uploader.upload(req.file.path, (res) => {
+                    console.log(res);
+                    user.photo = req.file.path;
+                    user.save();
                 });
-                res
-                .status(200)
-                .json(search);
-                search = [];
             });
         }
         else {
             res
             .status(500)
-            .send('Field cannot be left empty');
+            .send('Invalid token! Unable to connect to server side');
+        }
+    },
+    listMatch : (req, res) => {
+         
+       if (req.headers.token === env.secret) {
+        User.findOne({_id: req.params.user_id}, (err, user) => {
+        
+            User.find({}, (err, users) => {
+                if(matchusers.length <= 0) {
+                    _.each(users, (elem, index) => {
+                        if (elem.email != user.email) {
+                         if (matchusers.indexOf(elem) === -1) {
+                             for (var i = 0; i < user.interests.length; i++) {
+                                 if (elem.interests.toString().toLowerCase().indexOf(user.interests[i].toLowerCase()) != -1 && elem.position.lat === user.position.lat && elem.position.long === user.position.long && (elem.position.posInKilometers - user.position.posInKilometers <= 1)) {
+                                     matchusers.push(elem);
+                                     break;
+                                 }
+                             }
+                         }
+                        }
+                    });
+                } 
+                res
+                .status(200)
+                .json(matchusers);
+ 
+                matchusers = [];
+            });
+         
+        });
+       }
+       else {
+           res
+           .status(500)
+           .send('Invalid token! Unable to connect to server side');
+       }
+       
+    },
+    search : (req, res) => {
+        if (req.headers.token === env.secret) {
+            if (req.body.search) {
+                User.find({}, {}, {}, (err, items) => {
+                    _.each(items, (item, index) => {
+                        if (item.interests.toString().toLowerCase().indexOf(req.body.search.toLowerCase()) != -1) {
+                            search.push(item);
+                        }
+                    });
+                    res
+                    .status(200)
+                    .json(search);
+                    search = [];
+                });
+            }
+            else {
+                res
+                .status(500)
+                .send('Field cannot be left empty');
+            }
+        }
+        else {
+            res
+            .status(500)
+            .send('Invalid token! Unable to connect to server side');
         }
     },
     requestConnection : (req, res) => {
-        User.findOne({_id: req.params.user_id}, (err, user) => {
-            User.findOne({_id: req.params.match_id}, (err, match) => {
-                req.session.message = user.name+' wants to connect with you';
-                match.notification = req.session.message;
-                if (match.requestid.indexOf(user._id) === -1) {
-                    match.requestid.push(user._id);
-                }
-                match.save();
-                delete req.session.message;
-                res
-                .status(200)
-                .send('Connection Request Made');
+        if (req.headers.token === env.secret) {
+            User.findOne({_id: req.params.user_id}, (err, user) => {
+                User.findOne({_id: req.params.match_id}, (err, match) => {
+                    req.session.message = user.name+' wants to connect with you';
+                    match.notification = req.session.message;
+                    if (match.requestid.indexOf(user._id) === -1) {
+                        match.requestid.push(user._id);
+                    }
+                    match.save();
+                    delete req.session.message;
+                    res
+                    .status(200)
+                    .send('Connection Request Made');
+                });
             });
-        });
+        }
+        else {
+            res
+            .status(500)
+            .send('Invalid token! Unable to connect to server side');
+        }
     },
     acceptConnection : (req, res) => {
-        User.findOne({_id: req.params.user_id}, (err, user) => {
-            User.findOne({_id: req.params.match_id}, (err, match) => {
-                req.session.message = user.name+' accepted your request to connect. Make a call now';
-                match.notification = req.session.message;
-                match.requestphone.push(user.phone_number);
-                user.requestphone.push(match.phone_number);
-                user.requestid.splice(user.requestid.indexOf(match._id), 1);
-                user.notification = '';
-                match.save();
-                user.save();
-                delete req.session.message;
-                res
-                .status(200)
-                .send('Request Accepted');
+        if (req.headers.token === env.secret) {
+            User.findOne({_id: req.params.user_id}, (err, user) => {
+                User.findOne({_id: req.params.match_id}, (err, match) => {
+                    req.session.message = user.name+' accepted your request to connect. Make a call now';
+                    match.notification = req.session.message;
+                    match.requestphone.push(user.phone_number);
+                    user.requestphone.push(match.phone_number);
+                    user.requestid.splice(user.requestid.indexOf(match._id), 1);
+                    user.notification = '';
+                    match.save();
+                    user.save();
+                    delete req.session.message;
+                    res
+                    .status(200)
+                    .send('Request Accepted');
+                });
             });
-        });
+        }
+        else {
+            res
+            .status(500)
+            .send('Invalid token! Unable to connect to server side');
+        }
     },
     rejectConnection: (req, res) => {
+       if (req.headers.token === env.secret) {
         User.findOne({_id: req.params.user_id}, (err, user) => {
             User.findOne({_id: req.params.match_id}, (err, match) => {
                 match.notification = '';
@@ -229,57 +265,84 @@ module.exports = {
                 .send('Request Rejected');
             });
         });
+       }
+       else {
+           res
+           .status(500)
+           .send('Invalid token! Unable to connect to server side');
+       }
     },
     changeGeoLoc: (req, res) => {
-        User.findOne({_id: req.params.user_id}, (err, user) => {
-            user.position.lat = req.body.lat;
-            user.position.long = req.body.long;
-            user.position.posInKilometers = req.body.kilometers;
-            user.save();
-            res
-            .status(200)
-            .send('Geolocation Changed');
-        });
-    },
-    clearData: (req, res) => {
-        User.findOne({_id: req.params.user_id}, (err, user) => {
-            user.requestid = [];
-            user.requestphone = [];
-            user.save();
-        });
-    },
-    fbPersist: (req, res) => {
-        User.findOne({email: regex().test(req.body.email) ? req.body.email : req.body.displayName+'@facebook.com'}, (err, user) => {
-            if (user) {
+        if (req.headers.token === env.secret) {
+            User.findOne({_id: req.params.user_id}, (err, user) => {
+                user.position.lat = req.body.lat;
+                user.position.long = req.body.long;
+                user.position.posInKilometers = req.body.kilometers;
+                user.save();
                 res
                 .status(200)
-                .json(user);
-            }
-            else {
-                var newuser = new User({
-                    email: regex().test(req.body.email) ? req.body.email : require('faker').internet.email(),
-                    name: req.body.displayName,
-                    interests: ['?'],
-                    phone_number: req.body.phone ? req.body.phone : 'None',
-                    gravatar: require('md5')(regex().test(req.body.email) ? req.body.email : require('faker').internet.email())
-
-                });
-                newuser.validate((err) => {
-                    if (err) {
-                        res
-                        .status(500)
-                        .send(err);
-                    }
-                    else {
-                        newuser.createPassword(new Buffer('encrypted', 'utf8'));
-                        newuser.save();
-                        res
-                        .status(200)
-                        .json(newuser);
-
-                    }
-                });
-            }
-        });
+                .send('Geolocation Changed');
+            });
+        }
+        else {
+            res
+            .status(500)
+            .send('Invalid token! Unable to connect to server side');
+        }
+    },
+    clearData: (req, res) => {
+        if (req.headers.token === env.secret) {
+            User.findOne({_id: req.params.user_id}, (err, user) => {
+                user.requestid = [];
+                user.requestphone = [];
+                user.save();
+            });
+        }
+        else {
+            res
+            .status(500)
+            .send('Invalid token! Unable to connect to server side');
+        }
+    },
+    fbPersist: (req, res) => {
+        if (req.headers.token === env.secret) {
+            User.findOne({email: regex().test(req.body.email) ? req.body.email : req.body.displayName+'@facebook.com'}, (err, user) => {
+                if (user) {
+                    res
+                    .status(200)
+                    .json(user);
+                }
+                else {
+                    var newuser = new User({
+                        email: regex().test(req.body.email) ? req.body.email : require('faker').internet.email(),
+                        name: req.body.displayName,
+                        interests: ['?'],
+                        phone_number: req.body.phone ? req.body.phone : 'None',
+                        gravatar: require('md5')(regex().test(req.body.email) ? req.body.email : require('faker').internet.email())
+    
+                    });
+                    newuser.validate((err) => {
+                        if (err) {
+                            res
+                            .status(500)
+                            .send(err);
+                        }
+                        else {
+                            newuser.createPassword(new Buffer('encrypted', 'utf8'));
+                            newuser.save();
+                            res
+                            .status(200)
+                            .json(newuser);
+    
+                        }
+                    });
+                }
+            });
+        }
+        else {
+            res
+            .status(500)
+            .send('Invalid token! Unable to connect to server side');
+        }
     }
 }
