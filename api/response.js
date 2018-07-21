@@ -1,11 +1,22 @@
 const User = require('../model/user');
 const regex = require('email-regex');
 const _ = require('underscore');
+const env = require('../exports');
+const fs = require('fs');
+const cloudinary = require('cloudinary');
+const formidable = require('formidable');
 
+//var randomEmail = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 var allusers = [];
 var matchusers = [];
 var search = [];
 //var matchusersInSameLocation = [];
+
+cloudinary.config({
+    cloud_name: env.cloudinaryName,
+    api_key: env.cloudinaryKey,
+    api_secret: env.cloudinarySecret
+});
 
 
 module.exports = {
@@ -17,7 +28,7 @@ module.exports = {
                 allusers.push(elem);
             });
             res
-            .status(302)
+            .status(200)
             .json(allusers);
             allusers = [];
         });
@@ -26,96 +37,101 @@ module.exports = {
         User.findOne({_id: req.params.user_id}, (err, user) => {
             if (err) res.send(err);
             res
-            .status(302)
+            .status(200)
             .json(user);
         });
     },
     loginOrCreate : (req, res) => {
-        User.findOne({email: req.body.email}, (err, user) => {
-            if (err) res.send(err);
-            if (user) {
-                res
-                .status(500)
-                .send('User with given e-mail exists');
-            }
-            else {
-                User.findOne({phone_number: req.body.phone}, (err, item) => {
-                    if (item) {
+        if (req.headers.token === env.secret) {
+
+            User.findOne({phone_number: req.body.phone}, {}, (err, user) => {
+                if (user) {
+                    if (user.isValidPassword(req.body.password)) {
                         res
-                        .status(500)
-                        .send('User with mobile number exists');
+                        .status(200)
+                        .json(user);
                     }
                     else {
-                        var newuser = new User({
-                            email: req.body.email,
-                            first_name: req.body.first,
-                            last_name: req.body.last,
-                            phone_number: req.body.phone,
-                            interests: req.body.interests.split(', '),
-                            gravatar: require('md5')(req.body.email)
-                           /* location: {
-                                lat: req.body.lat,
-                                long: req.body.long
-                            }*/
-                        });
-        
-                        if (!regex().test(req.body.email)) {
+                        res
+                        .status(500)
+                        .send('Incorrect Password');
+                    }
+                }
+                else {
+                    var newuser = new User({
+                       phone_number: req.body.phone,
+                       email: require('faker').internet.email() || ' ',
+                       name: req.body.firstname ? req.body.firstname: require('faker').name.firstName(),
+                       lastname: require('faker').name.lastName()
+                    });
+                    newuser.createPassword(req.body.password);
+
+                    newuser.validate((err) => {
+                        if (err) {
                             res
                             .status(500)
-                            .send('Invalid email');
+                            .send(err);
                         }
                         else {
-                            newuser.validate((err) => {
-                                if (err) {
-                                    res
-                                    .status(500)
-                                    .send(err);
-                                }
-                                else {
-                                newuser.createPassword(req.body.pass);
-                                newuser.save();
-                                res
-                                .status(302)
-                                .json(newuser);
-                                }
-                                
-        
-                            });
+                            
+                            newuser.save();
+                            res
+                            .status(200)
+                            .json(newuser);
                         }
-                    }
-                });
-                
-            }
-        });    
-    },
-    edit : (req, res) => {
-        if (req.body.first && req.body.last && req.body.phone) {
-            User.findOne({_id: req.params.user_id}, (err, user) => {
-                user.first_name = req.body.first;
-                user.last_name = req.body.last;
-                user.phone_number = req.body.phone;
-                if(req.body.interests) {
-                    user.interests = [];
-                    _.each(req.body.interests.split(', '), (interest, index) => {
-                        user.interests.push(interest);
                     });
                 }
-                user.save();
-                /*res
-                .status(302)
-                .redirect('/api/users/'+req.params.user_id);
-                */
-               res
-               .status(302)
-               .json(user);
             });
         }
         else {
-
             res
             .status(500)
-            .send('Fields cannot be left empty');
+            .send('Invalid token! Unable to connect to server side');
+        }    
+    },
+    edit : (req, res) => {
+        if (req.headers.token === env.secret) {
+            if (req.body.lastname && req.body.email) {
+                User.findOne({_id: req.params.user_id}, (err, user) => {
+                    user.email = req.body.email;
+                    user.lastname = req.body.lastname;
+                    user.phone_number = req.body.phone_number;
+                    user.bio = req.body.bio;
+                    //user.name = req.body.name;
+                    user.gravatar = require('md5')(req.body.email ? req.body.email : user.email);
+                    if (req.body.interests) {
+                        _.each(req.body.interests.split(', '), (interest, index) => {
+                            if (!user.interests.indexOf(interest) === -1) {
+                                user.interests.push(interest);
+                            }
+                        });
+                    }
+                    user.save();
+                    res
+                    .status(200)
+                    .json(user);
+                });
+            }
+            else {
+                res
+                .status(500)
+                .send('Fields cannot be left empty')
+            }
         }
+        else {
+            res
+            .status(500)
+            .send('Invalid token! Unable to connect to server side');
+        }
+    },
+    uploadPhoto: (req, res, next) => {
+        User.findOne({_id: req.params.user_id}, {}, (err, user) => {
+            cloudinary.uploader.upload(req.file.path, (res) => {
+                console.log(res);
+                user.photo = req.file.path;
+                user.save();
+            });
+        });
     },
     listMatch : (req, res) => {
          
@@ -127,7 +143,7 @@ module.exports = {
                        if (elem.email != user.email) {
                         if (matchusers.indexOf(elem) === -1) {
                             for (var i = 0; i < user.interests.length; i++) {
-                                if (elem.interests.toString().toLowerCase().indexOf(user.interests[i].toLowerCase()) != -1 && elem.position.lat === user.position.lat && elem.position.long === user.position.long) {
+                                if (elem.interests.toString().toLowerCase().indexOf(user.interests[i].toLowerCase()) != -1 && elem.position.lat === user.position.lat && elem.position.long === user.position.long && (elem.position.posInKilometers - user.position.posInKilometers <= 1)) {
                                     matchusers.push(elem);
                                     break;
                                 }
@@ -137,7 +153,7 @@ module.exports = {
                    });
                } 
                res
-               .status(302)
+               .status(200)
                .json(matchusers);
 
                matchusers = [];
@@ -145,36 +161,6 @@ module.exports = {
         
        });
        
-    },
-    login : (req, res) => {
-        if (req.body.email && req.body.pass) {
-            if (regex().test(req.body.email)) {
-                User.findOne({email: req.body.email}, (err, user) => {
-                    if (user) {
-                        if (user.isValidPassword(req.body.pass)) {
-                            res
-                            .status(302)
-                            .json(user);
-                        }
-                        else {
-                            res
-                            .status(500)
-                            .send('Incorrect password');
-                        }
-                    }
-                    else {
-                        res
-                        .status(500)
-                        .send('Error! User Not Found');
-                    }
-                });
-            }
-            else {
-                res
-                .status(500)
-                .send('Error! Invalid e-mail');
-            }
-        }
     },
     search : (req, res) => {
         if (req.body.search) {
@@ -185,7 +171,7 @@ module.exports = {
                     }
                 });
                 res
-                .status(302)
+                .status(200)
                 .json(search);
                 search = [];
             });
@@ -199,13 +185,15 @@ module.exports = {
     requestConnection : (req, res) => {
         User.findOne({_id: req.params.user_id}, (err, user) => {
             User.findOne({_id: req.params.match_id}, (err, match) => {
-                req.session.message = user.first_name+' '+user.last_name+' wants to connect with you';
+                req.session.message = user.name+' wants to connect with you';
                 match.notification = req.session.message;
-                match.requestid = user._id;
+                if (match.requestid.indexOf(user._id) === -1) {
+                    match.requestid.push(user._id);
+                }
                 match.save();
                 delete req.session.message;
                 res
-                .status(302)
+                .status(200)
                 .send('Connection Request Made');
             });
         });
@@ -213,16 +201,17 @@ module.exports = {
     acceptConnection : (req, res) => {
         User.findOne({_id: req.params.user_id}, (err, user) => {
             User.findOne({_id: req.params.match_id}, (err, match) => {
-                req.session.message = user.first_name+' '+user.last_name+' accepted your request to connect. Make a call now';
+                req.session.message = user.name+' accepted your request to connect. Make a call now';
                 match.notification = req.session.message;
-                match.requestphone = user.phone_number;
-                user.requestid = '';
+                match.requestphone.push(user.phone_number);
+                user.requestphone.push(match.phone_number);
+                user.requestid.splice(user.requestid.indexOf(match._id), 1);
                 user.notification = '';
                 match.save();
                 user.save();
                 delete req.session.message;
                 res
-                .status(302)
+                .status(200)
                 .send('Request Accepted');
             });
         });
@@ -232,10 +221,11 @@ module.exports = {
             User.findOne({_id: req.params.match_id}, (err, match) => {
                 match.notification = '';
                 user.notification = '';
+                user.requestid.splice(user.requestid.indexOf(match._id), 1);
                 match.save();
                 user.save();
                 res
-                .status(302)
+                .status(200)
                 .send('Request Rejected');
             });
         });
@@ -244,27 +234,34 @@ module.exports = {
         User.findOne({_id: req.params.user_id}, (err, user) => {
             user.position.lat = req.body.lat;
             user.position.long = req.body.long;
+            user.position.posInKilometers = req.body.kilometers;
             user.save();
             res
-            .status(302)
+            .status(200)
             .send('Geolocation Changed');
+        });
+    },
+    clearData: (req, res) => {
+        User.findOne({_id: req.params.user_id}, (err, user) => {
+            user.requestid = [];
+            user.requestphone = [];
+            user.save();
         });
     },
     fbPersist: (req, res) => {
         User.findOne({email: regex().test(req.body.email) ? req.body.email : req.body.displayName+'@facebook.com'}, (err, user) => {
             if (user) {
                 res
-                .status(302)
+                .status(200)
                 .json(user);
             }
             else {
                 var newuser = new User({
-                    email: regex().test(req.body.email) ? req.body.email : req.body.displayName+'@facebook.com',
-                    first_name: req.body.displayName.split('')[0],
-                    last_name: req.body.displayName.split(' ')[1] || '-',
+                    email: regex().test(req.body.email) ? req.body.email : require('faker').internet.email(),
+                    name: req.body.displayName,
                     interests: ['?'],
                     phone_number: req.body.phone ? req.body.phone : 'None',
-                    gravatar: require('md5')(regex().test(req.body.email) ? req.body.email : req.body.displayName+'@facebook.com')
+                    gravatar: require('md5')(regex().test(req.body.email) ? req.body.email : require('faker').internet.email())
 
                 });
                 newuser.validate((err) => {
@@ -277,7 +274,7 @@ module.exports = {
                         newuser.createPassword(new Buffer('encrypted', 'utf8'));
                         newuser.save();
                         res
-                        .status(302)
+                        .status(200)
                         .json(newuser);
 
                     }

@@ -61,18 +61,18 @@ module.exports.init = (app) => {
         - phone: For phone number
         - interests: For interests
     */
-    app.put('/api/users/:user_id/edit/'+environment.secret+'.json', response.edit);
+    app.post('/api/users/:user_id/edit', response.edit);
 
     /*
         Get's all users. This sends an array to the client side which should perform a looping of some sort to get the data properly.
         The :list_number parameter is used to sort the array.. useful for pagination
     */
-    app.get('/api/users/'+environment.secret+'.json', response.getAll);
+    app.get('/api/users', response.getAll);
 
     /**
      * Find users that match logged user's interests
      */
-    app.get('/api/users/:user_id/match/'+environment.secret+'.json', response.listMatch);
+    app.get('/api/users/:user_id/match', response.listMatch);
 
     /**
      * Log user in
@@ -82,30 +82,40 @@ module.exports.init = (app) => {
     /**
      * Search for a particular user based on specified interest
      */
-    app.post('/api/users/search/'+environment.secret+'.json', response.search);
+    app.post('/api/users/search', response.search);
 
     /**
      * Request to connect with a user
      */
-    app.get('/api/users/:user_id/:match_id/request/'+environment.secret+'.json', response.requestConnection);
+    app.get('/api/users/:user_id/:match_id/request', response.requestConnection);
     
     /**
      * Accept user's connection request
      */
-    app.get('/api/users/:user_id/:match_id/accept/'+environment.secret+'.json', response.acceptConnection);
+    app.get('/api/users/:user_id/:match_id/accept', response.acceptConnection);
 
     /**
      * Reject user's connection request
      */
-    app.get('/api/users/:user_id/:match_id/reject/'+environment.secret+'.json', response.rejectConnection);
+    app.get('/api/users/:user_id/:match_id/reject', response.rejectConnection);
 
     /**
      * Change user's location as user moves
      */
-    app.put('/api/users/:user_id/changeloc/'+environment.secret+'.json', response.changeGeoLoc);
+    app.post('/api/users/:user_id/changeloc', response.changeGeoLoc);
 
     /**
      * Persist if data is coming from an FB background. If user exists, sends data
      */
-    app.post('/api/users/login/fb/'+environment.secret+'.json', response.fbPersist);
+    app.post('/api/users/login/fb', response.fbPersist);
+
+    /**
+     * Route to upload photo..
+     */
+    app.post('/api/:user_id/upload', require('multer')({dest: 'uploads/'}).single('photo'), response.uploadPhoto);
+
+    /**
+     * Clear recessive data 
+    */
+   app.get('/api/:user_id/clear', response.clearData);
 }

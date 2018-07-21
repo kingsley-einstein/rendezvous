@@ -10,39 +10,38 @@ var crypto = require('crypto');
 //Create schema 
 
 const userSchema = new Schema({
-    first_name: {
+    name: {
         type: String,
         required: true,
         maxlength: 80,
     },
-    last_name: {
+    lastname: {
         type: String,
-        required: true,
         maxlength: 80
     },
     email: {
         type: String,
         required: true,
-        unique: true,
+       // unique: true,
+    },
+    bio: {
+        type: String,
+        maxlength: 2000
     },
     hashedPassCode: String,
     phone_number: String,
+    photo: String,
     interests: [String],
-    fbProvider: {
-        type: {
-            id: String,
-            token: String
-        },
-        select: false
-    },
     position: {
         lat: Number,
-        long: Number
+        long: Number,
+        posInKilometers: Number
     },
     gravatar: String,
     notification: String,
-    requestid: String,
-    requestphone: String
+    requestid: [String],
+    requestphone: [String],
+    acceptedNumber: [String]
     
 });
 

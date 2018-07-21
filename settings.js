@@ -19,15 +19,18 @@ module.exports = {
             saveUninitialized: true,
             store: new MongoStore({
                 mongooseConnection: require('mongoose').connection,
-                db: app.get('env') === 'development' ? 'getphysicaltestdb' : 'getphysicalclouddb'
+                db: app.get('env') === 'development' ? 'rendezvoustestdb' : 'rendezvousclouddb'
             })
         }));
         app.use((req, res, next) => {
             res.header('Access-Control-Allow-Origin', '*');
             res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+            res.header('Access-Control-Allow-Methods', 'GET, POST');
             next();
         });
         app.set('json spaces', 4);
+        app.use(require('express-fileupload')());
+       // app.use(require('multer')().single());
         /*app.use((req, res, next) => {
             res.locals.flash = req.session.flash;
             delete req.session.flash;

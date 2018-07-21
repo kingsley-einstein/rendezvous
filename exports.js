@@ -7,5 +7,8 @@ module.exports = {
     mongoProd: process.env.MONGO_PROD,
     mongoDev: process.env.MONGO_DEV,
     secret: process.env.SECRET_TOKEN,
-    port: process.env.PORT
+    port: process.env.PORT,
+    cloudinarySecret: process.env.CLOUDINARY_SECRET,
+    cloudinaryKey: process.env.CLOUDINARY_KEY,
+    cloudinaryName: process.env.CLOUDINARY_CLOUDNAME
 }

@@ -13,8 +13,9 @@ describe('CALLS', () => {
     const app = {
         get: sinon.spy(),
         post: sinon.spy(),
-        put: sinon.spy(),
-        use: sinon.spy()
+        //put: sinon.spy(),
+        use: sinon.spy(),
+        set: sinon.spy()
     };
     beforeEach(() => {
         settings.config(app);
@@ -25,49 +26,51 @@ describe('CALLS', () => {
     });
     describe('RESPONSES', () => {
         describe('GET', () => {
-            it('should handle /api/users/:user_id/'+environment.secret, () => {
-                expect(app.get).to.be.calledWith('/api/users/:user_id/'+environment.secret, response.getSpecific);
+            it('should handle /api/users/:user_id', () => {
+                expect(app.get).to.be.calledWith('/api/users/:user_id', response.getSpecific);
             });
-            it('should handle /api/users/'+environment.secret, () => {
-                expect(app.get).to.be.calledWith('/api/users/'+environment.secret, response.getAll);
+            it('should handle /api/users/', () => {
+                expect(app.get).to.be.calledWith('/api/users', response.getAll);
             });
-            it('should handle /api/users/:user_id/match/'+environment.secret, () => {
-                expect(app.get).to.be.calledWith('/api/users/:user_id/match/'+environment.secret, response.listMatch);
+            it('should handle /api/users/:user_id/match', () => {
+                expect(app.get).to.be.calledWith('/api/users/:user_id/match', response.listMatch);
             });
-            it('should handle /api/users/:user_id/:match_id/request/'+environment.secret, () => {
-                expect(app.get).to.be.calledWith('/api/users/:user_id/:match_id/request/'+environment.secret, response.requestConnection);
+            it('should handle /api/users/:user_id/:match_id/request', () => {
+                expect(app.get).to.be.calledWith('/api/users/:user_id/:match_id/request', response.requestConnection);
             });
-            it('should handle /api/users/:user_id/:match_id/accept/'+environment.secret, () => {
-                expect(app.get).to.be.calledWith('/api/users/:user_id/:match_id/accept/'+environment.secret, response.acceptConnection);
+            it('should handle /api/users/:user_id/:match_id/accept/', () => {
+                expect(app.get).to.be.calledWith('/api/users/:user_id/:match_id/accept', response.acceptConnection);
             });
-            it('should handle /api/users/:user_id/:match_id/reject/'+environment.secret, () => {
-                expect(app.get).to.be.calledWith('/api/users/:user_id/:match_id/reject/'+environment.secret, response.rejectConnection);
+            it('should handle /api/users/:user_id/:match_id/reject', () => {
+                expect(app.get).to.be.calledWith('/api/users/:user_id/:match_id/reject', response.rejectConnection);
+            });
+            it('should handle /api/:user_id/clear', () => {
+                expect(app.get).to.be.calledWith('/api/:user_id/clear', response.clearData);
             });
 
             
         });
         describe('POST', () => {
-            it('should handle /api/users/create/'+environment.secret, () => {
-                expect(app.post).to.be.calledWith('/api/users/create/'+environment.secret, response.create);
+            it('should handle /api/users/create', () => {
+                expect(app.post).to.be.calledWith('/api/users/logorcreate', response.loginOrCreate);
             });
-            it('should handle /api/login/'+environment.secret, () => {
+           /** 
+            * it('should handle /api/login/'+environment.secret, () => {
                 expect(app.post).to.be.calledWith('/api/login/'+environment.secret, response.login);
             });
-            it('should handle /api/users/search/'+environment.secret, () => {
-                expect(app.post).to.be.calledWith('/api/users/search/'+environment.secret, response.search);
+            */
+            it('should handle /api/users/search', () => {
+                expect(app.post).to.be.calledWith('/api/users/search', response.search);
             });
-            it('should handle /api/users/login/fb/'+environment.secret, () => {
-                expect(app.post).to.be.calledWith('/api/users/login/fb/'+environment.secret, response.fbPersist);
+            it('should handle /api/users/login/fb', () => {
+                expect(app.post).to.be.calledWith('/api/users/login/fb', response.fbPersist);
             });
+           /** it('should handle /api/:user_id/upload', () => {
+                expect(app.post).to.be.calledWith('/api/:user_id/upload', response.uploadPhoto);
+            });**/
+            
         });
-        describe('PUT', () => {
-            it('should handle /api/users/:user_id/edit/'+environment.secret, () => {
-                expect(app.put).to.be.calledWith('/api/users/:user_id/edit/'+environment.secret, response.edit);
-            });
-            it('should handle /api/users/:user_id/changeloc/'+environment.secret, () => {
-                expect(app.put).to.be.calledWith('/api/users/:user_id/changeloc/'+environment.secret, response.changeGeoLoc);
-            });
-        });
+        
     });
     /*describe('USE', () => {
         it('should use', () => {
