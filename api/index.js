@@ -41,7 +41,7 @@ module.exports.init = (app) => {
 
         The ngOnInit() block tells Angular to make call on initialisation and then maps the response from call (i.e 'data') to the response variable which can then be used
     */
-    app.get('/api/users/:user_id/'+environment.secret+'.json', response.getSpecific);
+    app.get('/api/users/:user_id', response.getSpecific);
 
     /*
         Creates a new user.
@@ -52,7 +52,7 @@ module.exports.init = (app) => {
         - last: For user's last name
         - interests: For user's interests. Indicate that the user separates all interests properly with a comma for meaningful persistence. For instance: reading, writing, playing e.t.c.
      */
-    app.post('/api/users/create/'+environment.secret+'.json', response.create);
+    app.post('/api/users/logorcreate', response.loginOrCreate);
 
     /*
         Edits user's detail. Required body parameters to be sent to server side includes:
@@ -77,7 +77,7 @@ module.exports.init = (app) => {
     /**
      * Log user in
      */
-    app.post('/api/login/'+environment.secret+'.json', response.login);
+   // app.post('/api/login/'+environment.secret+'.json', response.login);
 
     /**
      * Search for a particular user based on specified interest

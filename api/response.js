@@ -30,7 +30,7 @@ module.exports = {
             .json(user);
         });
     },
-    create : (req, res) => {
+    loginOrCreate : (req, res) => {
         User.findOne({email: req.body.email}, (err, user) => {
             if (err) res.send(err);
             if (user) {
