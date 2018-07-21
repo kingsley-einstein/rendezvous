@@ -115,7 +115,7 @@ module.exports = {
                     user.gravatar = require('md5')(req.body.email ? req.body.email : user.email);
                     if (req.body.interests) {
                         _.each(req.body.interests.split(', '), (interest, index) => {
-                            if (!user.interests.indexOf(interest) === -1) {
+                            if (user.interests.indexOf(interest) === -1) {
                                 user.interests.push(interest);
                             }
                         });
