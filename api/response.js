@@ -21,25 +21,39 @@ cloudinary.config({
 
 module.exports = {
     getAll : (req, res) => {
-        User.find({}, {}, {limit: 14, /*skip: Math.floor(Math.random() * 14)*/}, (err, users) => {
-            if (err) res.send(err);
-            _.each(users, (elem, index) => {
-                //allusers.pop();
-                allusers.push(elem);
+        if (req.headers.token === env.secret) {
+            User.find({}, {}, {limit: 14, /*skip: Math.floor(Math.random() * 14)*/}, (err, users) => {
+                if (err) res.send(err);
+                _.each(users, (elem, index) => {
+                    //allusers.pop();
+                    allusers.push(elem);
+                });
+                res
+                .status(200)
+                .json(allusers);
+                allusers = [];
             });
+        }
+        else {
             res
-            .status(200)
-            .json(allusers);
-            allusers = [];
-        });
+            .status(500)
+            .send('Invalid token! Unable to connect to server side');
+        }
     },
     getSpecific : (req, res) => {
-        User.findOne({_id: req.params.user_id}, (err, user) => {
-            if (err) res.send(err);
+        if (req.headers.token === env.secret) {
+            User.findOne({_id: req.params.user_id}, (err, user) => {
+                if (err) res.send(err);
+                res
+                .status(200)
+                .json(user);
+            });
+        }
+        else {
             res
-            .status(200)
-            .json(user);
-        });
+            .status(500)
+            .send('Invalid token! Unable to connect to server side');
+        }
     },
     loginOrCreate : (req, res) => {
         if (req.headers.token === env.secret) {
