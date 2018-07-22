@@ -2,9 +2,10 @@ const User = require('../model/user');
 const regex = require('email-regex');
 const _ = require('underscore');
 const env = require('../exports');
-const fs = require('fs');
+//const fs = require('fs');
 const cloudinary = require('cloudinary');
-const formidable = require('formidable');
+//const formidable = require('formidable');
+const DataUri = require('datauri');
 
 //var randomEmail = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 var allusers = [];
@@ -142,9 +143,19 @@ module.exports = {
     uploadPhoto: (req, res, next) => {
         if (req.headers.token === env.secret) {
             User.findOne({_id: req.params.user_id}, {}, (err, user) => {
-                cloudinary.uploader.upload(req.file, (res) => {
-                    console.log(res);
-                    user.photo = req.file;
+                var datauri = new DataUri();
+                datauri.format(require('path').extname(req.file.name).toString(), req.file.buffer);
+                cloudinary.uploader.upload(datauri.content, (err, res) => {
+                    
+                    if (err) {
+                        console.log(err);
+                    }
+                    else {
+                        console.log(res);
+                    }
+
+                    
+                    user.photo = datauri.content;
                     user.save();
                 });
             });
