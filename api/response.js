@@ -157,6 +157,9 @@ module.exports = {
                     
                     user.photo = datauri.content;
                     user.save();
+                    res
+                    .status(200)
+                    .send('Photo successfully uploaded');
                 });
             });
         }
