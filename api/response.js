@@ -144,12 +144,12 @@ module.exports = {
     uploadPhoto: (req, res, next) => {
         if (req.headers.token === env.secret) {
             User.findOne({_id: req.params.user_id}, {}, (err, user) => {
-                cloudinary.v2.uploader.upload(req.file.filename, (err, result) => {
-                    if (err) {
-                        console.log(err);
+                cloudinary.v2.uploader.upload(req.file.filename, (error, result) => {
+                    if (error) {
+                        console.log(error);
                         res
                         .status(500)
-                        .send(err);
+                        .send(error);
                     }
                     else {
                         console.log(result);

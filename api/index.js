@@ -1,5 +1,13 @@
 const response = require('./response');
 const environment = require('../exports');
+const storage = require('multer').diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, '/uploads/'+Date.now());
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.fieldname+'-'+file.originalname);
+    }
+});
 
 module.exports.init = (app) => {
 
@@ -112,7 +120,7 @@ module.exports.init = (app) => {
     /**
      * Route to upload photo..
      */
-    app.post('/api/:user_id/upload', require('multer')({dest: 'uploads/'}).single('photo'), response.uploadPhoto);
+    app.post('/api/:user_id/upload', require('multer')({storage: storage}).single('photo'), response.uploadPhoto);
 
     /**
      * Clear recessive data 
