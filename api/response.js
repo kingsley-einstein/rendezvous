@@ -141,9 +141,9 @@ module.exports = {
     uploadPhoto: (req, res, next) => {
         if (req.headers.token === env.secret) {
             User.findOne({_id: req.params.user_id}, {}, (err, user) => {
-                cloudinary.uploader.upload(req.file.filename, (res) => {
+                cloudinary.uploader.upload(req.file, (res) => {
                     console.log(res);
-                    user.photo = req.file.filename;
+                    user.photo = req.file;
                     user.save();
                 });
             });
