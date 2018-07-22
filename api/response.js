@@ -15,7 +15,8 @@ var search = [];
 cloudinary.config({
     cloud_name: env.cloudinaryName,
     api_key: env.cloudinaryKey,
-    api_secret: env.cloudinarySecret
+    api_secret: env.cloudinarySecret,
+    file: 'image/jpg'
 });
 
 
