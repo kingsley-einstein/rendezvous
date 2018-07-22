@@ -11,5 +11,6 @@ module.exports = {
     port: process.env.PORT,
     cloudinarySecret: process.env.CLOUDINARY_SECRET,
     cloudinaryKey: process.env.CLOUDINARY_KEY,
-    cloudinaryName: process.env.CLOUDINARY_CLOUDNAME
+    cloudinaryName: process.env.CLOUDINARY_CLOUDNAME,
+    cloudinaryUrl: process.env.CLOUDINARY_URL
 }

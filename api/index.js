@@ -112,7 +112,7 @@ module.exports.init = (app) => {
     /**
      * Route to upload photo..
      */
-    app.post('/api/:user_id/upload', response.uploadPhoto);
+    app.post('/api/:user_id/upload', require('multer')({dest: 'uploads/'}).single('photo'), response.uploadPhoto);
 
     /**
      * Clear recessive data 
