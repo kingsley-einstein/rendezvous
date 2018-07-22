@@ -4,7 +4,7 @@ const _ = require('underscore');
 const env = require('../exports');
 //const fs = require('fs');
 const cloudinary = require('cloudinary');
-//const formidable = require('formidable');
+const formidable = require('formidable');
 const DataUri = require('datauri');
 
 //var randomEmail = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -140,26 +140,12 @@ module.exports = {
             .send('Invalid token! Unable to connect to server side');
         }
     },
-    uploadPhoto: (req, res, next) => {
+    uploadPhoto: (req, res) => {
         if (req.headers.token === env.secret) {
             User.findOne({_id: req.params.user_id}, {}, (err, user) => {
-                var datauri = new DataUri();
-                datauri.format(require('path').extname(req.file.originalname).toString(), req.file.buffer);
-                cloudinary.uploader.upload(datauri.content, (err, res) => {
-                    
-                    if (err) {
-                        console.log(err);
-                    }
-                    else {
-                        console.log(res);
-                    }
-
-                    
-                    user.photo = datauri.content;
-                    user.save();
-                    res
-                    .status(200)
-                    .send('Photo successfully uploaded');
+                var incomingForm = new formidable.IncomingForm();
+                incomingForm.parse(req, (err, fields, files) => {
+                    console.log(files.photo.name);
                 });
             });
         }
