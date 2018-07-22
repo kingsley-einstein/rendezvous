@@ -144,7 +144,7 @@ module.exports = {
         if (req.headers.token === env.secret) {
             User.findOne({_id: req.params.user_id}, {}, (err, user) => {
                 var datauri = new DataUri();
-                datauri.format(require('path').extname(req.file).toString(), req.file.buffer);
+                datauri.format(require('path').extname(req.file.originalname).toString(), req.file.buffer);
                 cloudinary.uploader.upload(datauri.content, (err, res) => {
                     
                     if (err) {
