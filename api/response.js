@@ -25,7 +25,7 @@ cloudinary.config({
 module.exports = {
     getAll : (req, res) => {
         if (req.headers.token === env.secret) {
-            User.find({}, {}, {limit: 14, /*skip: Math.floor(Math.random() * 14)*/}, (err, users) => {
+            User.find({}, {}, {limit: 20, /*skip: Math.floor(Math.random() * 14)*/}, (err, users) => {
                 if (err) res.send(err);
                 _.each(users, (elem, index) => {
                     //allusers.pop();
