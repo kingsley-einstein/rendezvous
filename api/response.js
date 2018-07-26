@@ -303,9 +303,11 @@ module.exports = {
     changeGeoLoc: (req, res) => {
         if (req.headers.token === env.secret) {
             User.findOne({_id: req.params.user_id}, (err, user) => {
-                user.position.lat = Number.parseFloat(req.body.lat);
-                user.position.long = Number.parseFloat(req.body.lon);
-                user.position.posInKilometers = Number.parseFloat(req.body.kilometers);
+                user.position.lat = req.body.lat;
+                user.position.long = req.body.lon;
+                user.position.posInKilometers = req.body.kilometers;
+                console.log(req.body.lon);
+                console.log(req.body.lat);
                 user.save();
                 res
                 .status(200)
