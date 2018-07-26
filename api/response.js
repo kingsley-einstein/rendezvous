@@ -304,7 +304,7 @@ module.exports = {
         if (req.headers.token === env.secret) {
             User.findOne({_id: req.params.user_id}, (err, user) => {
                 user.position.lat = req.body.lat;
-                user.position.long = req.body.long;
+                user.position.long = req.body.lon;
                 user.position.posInKilometers = req.body.kilometers;
                 user.save();
                 res
