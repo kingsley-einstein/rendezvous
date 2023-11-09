@@ -1,0 +1,469 @@
+repo_name: kingsley-einstein/rendezvous
+report_id: 314fad1de70e726b36dce1ca1b31860c
+repo_type: Public
+timestamp: '2023-11-09T20:02:31+00:00'
+requested_by: kingsley-einstein
+provider: github
+branch: master
+detected_tools_count: 29
+tools:
+- name: JavaScript
+  description: Lightweight, interpreted, object-oriented language with first-class
+    functions
+  website_url: https://developer.mozilla.org/en-US/docs/Web/JavaScript
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/1209/javascript.jpeg
+  detection_source: Repo Metadata
+- name: ExpressJS
+  description: Sinatra inspired web development framework for node.js -- insanely
+    fast, flexible, and simple
+  website_url: http://expressjs.com/
+  version: 4.16.3
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Microframeworks (Backend)
+  image_url: https://img.stackshare.io/service/1163/hashtag.png
+  detection_source_url: package-lock.json
+  detection_source: package.json
+  last_updated_by: Kingsley Victor
+  last_updated_on: 2018-07-21 20:46:02.000000000 Z
+- name: Mongoose
+  description: MongoDB object modeling designed to work in an asynchronous environment
+  website_url: http://mongoosejs.com/
+  version: 5.2.3
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Data Stores
+  sub_category: Object Document Mapper (ODM)
+  image_url: https://img.stackshare.io/service/1231/0TXzZU7W_400x400.jpg
+  detection_source_url: package-lock.json
+  detection_source: package.json
+  last_updated_by: Kingsley Victor
+  last_updated_on: 2018-07-13 14:27:17.000000000 Z
+- name: Chai
+  description: A BDD / TDD assertion library
+  website_url: http://chaijs.com/
+  version: 4.1.2
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Javascript Testing Framework
+  image_url: https://img.stackshare.io/service/1725/chai.png
+  detection_source_url: package-lock.json
+  detection_source: package.json
+  last_updated_by: Kingsley Victor
+  last_updated_on: 2018-07-13 14:27:17.000000000 Z
+- name: Dotenv
+  description: Loads environment variables from .env for Nodejs projects
+  website_url: https://github.com/motdotla/dotenv
+  license: BSD-2-Clause
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Server Configuration and Automation
+  image_url: https://img.stackshare.io/service/8067/default_90dcb1286af7685c68df319c764b80704df1155b.png
+  detection_source: package.json
+  last_updated_by: Kingsley Victor
+  last_updated_on: 2018-07-16 11:45:40.000000000 Z
+- name: Git
+  description: Fast, scalable, distributed revision control system
+  website_url: http://git-scm.com/
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Version Control System
+  image_url: https://img.stackshare.io/service/1046/git.png
+  detection_source: Repo Metadata
+- name: SinonJS
+  description: Standalone test spies, stubs and mocks for JavaScript
+  website_url: http://sinonjs.org/
+  version: 6.1.3
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Javascript Testing Framework
+  image_url: https://img.stackshare.io/service/3509/logo.png
+  detection_source_url: package-lock.json
+  detection_source: package.json
+  last_updated_by: Kingsley Victor
+  last_updated_on: 2018-07-16 22:07:04.000000000 Z
+- name: npm
+  description: The package manager for JavaScript.
+  website_url: https://www.npmjs.com/
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Front End Package Manager
+  image_url: https://img.stackshare.io/service/1120/lejvzrnlpb308aftn31u.png
+  detection_source: package.json
+  last_updated_by: Kingsley Victor
+  last_updated_on: 2018-07-13 14:27:17.000000000 Z
+- name: Cloudinary
+  description: An end-to-end image &amp; video management solution for your web and
+    mobile applications
+  website_url: http://cloudinary.com/
+  open_source: false
+  hosted_saas: true
+  category: Assets and Media
+  sub_category: Image Processing and Management
+  image_url: https://img.stackshare.io/service/304/default_d0fb82038ec18f67ca33bf6ce0df0bffb427e94f.png
+  detection_source: package.json
+  last_updated_by: Kingsley Victor
+  last_updated_on: 2018-07-21 20:46:02.000000000 Z
+- name: body-parser
+  description: Node.js body parsing middleware
+  package_url: https://www.npmjs.com/body-parser
+  version: 1.18.3
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/15906/default_7c39a83d4acd952df89b1ebfdb94c8646324fbf1.png
+  detection_source_url: package-lock.json
+  detection_source: package.json
+  last_updated_by: Kingsley Victor
+  last_updated_on: 2018-07-13 14:27:17.000000000 Z
+- name: connect-mongo
+  description: MongoDB session store for Express and Connect
+  package_url: https://www.npmjs.com/connect-mongo
+  version: 2.0.1
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/17588/default_e98b11d23d67b728bd1f3e02eba62d97a55febbd.png
+  detection_source_url: package-lock.json
+  detection_source: package.json
+  last_updated_by: Kingsley Victor
+  last_updated_on: 2018-07-13 14:27:17.000000000 Z
+- name: cookie-parser
+  description: Parse HTTP request cookies
+  package_url: https://www.npmjs.com/cookie-parser
+  version: 1.4.3
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/16136/default_def3edb85d7fbd20200a5cd7d0a1679e31bc8b3d.png
+  detection_source_url: package-lock.json
+  detection_source: package.json
+  last_updated_by: Kingsley Victor
+  last_updated_on: 2018-07-13 14:27:17.000000000 Z
+- name: crypto
+  description: This package is no longer supported and has been deprecated
+  package_url: https://www.npmjs.com/crypto
+  version: 1.0.1
+  license: ISC
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/16387/default_000ae7ee50b56e0ecdb07d3662d4b3fa7f4cbdcc.png
+  detection_source_url: package-lock.json
+  detection_source: package.json
+  last_updated_by: Kingsley Victor
+  last_updated_on: 2018-07-13 14:27:17.000000000 Z
+- name: express
+  description: Fast, unopinionated, minimalist web framework
+  package_url: https://www.npmjs.com/express
+  version: 4.16.3
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/15818/default_db4a7791d2f1174547374b9b587bc10fec088a5a.png
+  detection_source_url: package-lock.json
+  detection_source: package.json
+  last_updated_by: Kingsley Victor
+  last_updated_on: 2018-07-21 20:46:02.000000000 Z
+  vulnerabilities:
+  - name: qs vulnerable to Prototype Pollution
+    cve_id: CVE-2022-24999
+    cve_url: https://github.com/advisories/GHSA-hrpp-h998-j3pp
+    detected_date: Dec 7
+    severity: high
+    first_patched: 4.17.3
+- name: express-jwt
+  description: JWT authentication middleware
+  package_url: https://www.npmjs.com/express-jwt
+  version: 5.3.1
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/17884/default_788839e3786ca1ccd5da69cc550f25d0129fb180.png
+  detection_source_url: package-lock.json
+  detection_source: package.json
+  last_updated_by: Kingsley Victor
+  last_updated_on: 2018-07-21 20:46:02.000000000 Z
+  vulnerabilities:
+  - name: Authorization bypass in express-jwt
+    cve_id: CVE-2020-15084
+    cve_url: https://github.com/advisories/GHSA-6g6m-m6h5-w9gf
+    detected_date: Aug 22
+    severity: high
+    first_patched: 6.0.0
+- name: express-session
+  description: Simple session middleware for Express
+  package_url: https://www.npmjs.com/express-session
+  version: 1.15.6
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/16239/default_180418c6fa6cdb8f7a3500f84a8fedb884fcb3fa.png
+  detection_source_url: package-lock.json
+  detection_source: package.json
+  last_updated_by: Kingsley Victor
+  last_updated_on: 2018-07-21 20:46:02.000000000 Z
+- name: faker
+  description: Generate massive amounts of fake contextual data
+  package_url: https://www.npmjs.com/faker
+  version: 4.1.0
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/16327/default_1baba0e6ece19a38adfb211f686c83c781ff703a.png
+  detection_source_url: package-lock.json
+  detection_source: package.json
+  last_updated_by: Kingsley Victor
+  last_updated_on: 2018-07-21 20:46:02.000000000 Z
+- name: formidable
+  description: A node.js module for parsing form data
+  package_url: https://www.npmjs.com/formidable
+  version: 1.2.1
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/16761/default_c11d90814ded8fcd305b22fdc42b42a3111f1f6d.png
+  detection_source_url: package-lock.json
+  detection_source: package.json
+  last_updated_by: Kingsley Victor
+  last_updated_on: 2018-07-21 20:46:02.000000000 Z
+- name: fs
+  description: This package name is not currently in use, but was formerly occupied
+    by another package
+  package_url: https://www.npmjs.com/fs
+  version: 0.0.1
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/16098/default_63a34654baee757196ddff2457bd1c9a0dfb7287.png
+  detection_source_url: package-lock.json
+  detection_source: package.json
+  last_updated_by: Kingsley Victor
+  last_updated_on: 2018-07-13 14:27:17.000000000 Z
+- name: jsonwebtoken
+  description: JSON Web Token implementation
+  package_url: https://www.npmjs.com/jsonwebtoken
+  version: 8.3.0
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/16155/default_77b54a203c743d16eddb6b6390cba17218454fa0.png
+  detection_source_url: package-lock.json
+  detection_source: package.json
+  last_updated_by: Kingsley Victor
+  last_updated_on: 2018-07-13 14:27:17.000000000 Z
+  vulnerabilities:
+  - name: jsonwebtoken has insecure input validation in jwt.verify function
+    cve_id: CVE-2022-23529
+    cve_url: https://github.com/advisories/GHSA-27h2-hvpr-p74q
+    detected_date: Dec 22
+    severity: high
+    first_patched: 9.0.0
+  - name: 'jsonwebtoken unrestricted key type could lead to legacy keys usage '
+    cve_id: CVE-2022-23539
+    cve_url: https://github.com/advisories/GHSA-8cf7-32gw-wr33
+    detected_date: Dec 22
+    severity: moderate
+    first_patched: 9.0.0
+  - name: jsonwebtoken vulnerable to signature validation bypass due to insecure default
+      algorithm in jwt.verify()
+    cve_id: CVE-2022-23540
+    cve_url: https://github.com/advisories/GHSA-qwph-4952-7xr6
+    detected_date: Dec 22
+    severity: moderate
+    first_patched: 9.0.0
+  - name: jsonwebtoken's insecure implementation of key retrieval function could lead
+      to Forgeable Public/Private Tokens from RSA to HMAC
+    cve_id: CVE-2022-23541
+    cve_url: https://github.com/advisories/GHSA-hjrf-2m68-5959
+    detected_date: Dec 22
+    severity: moderate
+    first_patched: 9.0.0
+- name: md5
+  description: Js function for hashing messages with MD5
+  package_url: https://www.npmjs.com/md5
+  version: 2.2.1
+  license: BSD-3-Clause
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/16342/default_c47f6a56d74fae4d4404d77067b2fa35da6f1924.png
+  detection_source_url: package-lock.json
+  detection_source: package.json
+  last_updated_by: Kingsley Victor
+  last_updated_on: 2018-07-13 14:27:17.000000000 Z
+- name: morgan
+  description: HTTP request logger middleware for node.js
+  package_url: https://www.npmjs.com/morgan
+  version: 1.9.0
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/16097/default_c7b204838197013798409fa2b4dafce450edc7fb.png
+  detection_source_url: package-lock.json
+  detection_source: package.json
+  last_updated_by: Kingsley Victor
+  last_updated_on: 2018-07-13 14:27:17.000000000 Z
+  vulnerabilities:
+  - name: Code Injection in morgan
+    cve_id: CVE-2019-5413
+    cve_url: https://github.com/advisories/GHSA-gwg9-rgvj-4h5j
+    detected_date: Aug 22
+    severity: critical
+    first_patched: 1.9.1
+- name: multer
+  description: Middleware for handling `multipart/form-data`
+  package_url: https://www.npmjs.com/multer
+  version: 1.3.1
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/16421/default_23e0dabcd0197f0c1f0a41268f8ca3f7e8b1f1e2.png
+  detection_source_url: package-lock.json
+  detection_source: package.json
+  last_updated_by: Kingsley Victor
+  last_updated_on: 2018-07-21 20:46:02.000000000 Z
+- name: passport
+  description: Simple, unobtrusive authentication for Node.js
+  package_url: https://www.npmjs.com/passport
+  version: 0.4.0
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/16304/default_1baba0e6ece19a38adfb211f686c83c781ff703a.png
+  detection_source_url: package-lock.json
+  detection_source: package.json
+  last_updated_by: Kingsley Victor
+  last_updated_on: 2018-07-13 14:27:17.000000000 Z
+  vulnerabilities:
+  - name: Passport vulnerable to session regeneration when a users logs in or out
+    cve_id: CVE-2022-25896
+    cve_url: https://github.com/advisories/GHSA-v923-w3x8-wh69
+    detected_date: Jul 7
+    severity: moderate
+    first_patched: 0.6.0
+- name: passport-facebook
+  description: Facebook authentication strategy for Passport
+  package_url: https://www.npmjs.com/passport-facebook
+  version: 2.1.1
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/17972/default_5cd4226daecf35530a193ea8bd553edbe0c69ed1.png
+  detection_source_url: package-lock.json
+  detection_source: package.json
+  last_updated_by: Kingsley Victor
+  last_updated_on: 2018-07-13 14:27:17.000000000 Z
+- name: path
+  description: Node.JS path module
+  package_url: https://www.npmjs.com/path
+  version: 0.12.7
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/16082/default_924b66c04aa848a4028c1a5753a23dae0f835f86.png
+  detection_source_url: package-lock.json
+  detection_source: package.json
+  last_updated_by: Kingsley Victor
+  last_updated_on: 2018-07-13 14:27:17.000000000 Z
+- name: request
+  description: Simplified HTTP request client
+  package_url: https://www.npmjs.com/request
+  version: 2.87.0
+  license: Apache-2.0
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/15823/default_5e5e8ac63beda29f31f1844df64d4b8247570a66.png
+  detection_source_url: package-lock.json
+  detection_source: package.json
+  last_updated_by: Kingsley Victor
+  last_updated_on: 2018-07-13 14:27:17.000000000 Z
+  vulnerabilities:
+  - name: Server-Side Request Forgery in Request
+    cve_id: CVE-2023-28155
+    cve_url: https://github.com/advisories/GHSA-p8p7-x288-28g6
+    detected_date: Mar 17
+    severity: moderate
+    first_patched: 
+- name: sinon-chai
+  description: Extends Chai with assertions for the Sinon.JS mocking framework
+  package_url: https://www.npmjs.com/sinon-chai
+  version: 3.2.0
+  license: BSD-2-Clause,WTFPL
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/15914/default_1d65e37e65b7f80761374f0202776043277d505d.png
+  detection_source_url: package-lock.json
+  detection_source: package.json
+  last_updated_by: Kingsley Victor
+  last_updated_on: 2018-07-16 22:07:04.000000000 Z
+- name: underscore
+  description: JavaScript's functional programming helper library
+  package_url: https://www.npmjs.com/underscore
+  version: 1.9.1
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/15882/default_0b10af8ca19c215f781dc07442e75bdc831089d0.png
+  detection_source_url: package-lock.json
+  detection_source: package.json
+  last_updated_by: Kingsley Victor
+  last_updated_on: 2018-07-13 14:27:17.000000000 Z
+  vulnerabilities:
+  - name: Arbitrary Code Execution in underscore
+    cve_id: CVE-2021-23358
+    cve_url: https://github.com/advisories/GHSA-cf4h-3jhx-xvhq
+    detected_date: Aug 22
+    severity: critical
+    first_patched: 1.12.1
